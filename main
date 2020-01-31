@@ -1,0 +1,46 @@
+import classes
+start_money = 50
+max_npc = 4
+
+print('==========BlackJack=========')
+New_Deck = classes.Deck(1)
+# 덱 객체를 하나 생성, 들어가는 숫자는 사용하는 카드 벌수
+Dealer = classes.Dealer()
+You = classes.Player(start_money)
+NPC = []
+playerNum = input('How many NPCs do you want to play with? Max = 4')
+while int(playerNum) > max_npc:
+    playerNum = input('최대 4명입니다. 다시 입력해 주세요.')
+for i in range(0, int(playerNum)):
+    NPC.append(classes.Player(start_money))
+# scan number
+# make player class 'scan' times
+
+end = 0
+# 게임이 끝났을 때 end 가 1이 된다
+while end == 0:
+    round_num = 1
+    print('==========ROUND %d==========' % round_num)
+    for i in range(0, 2):
+        Dealer.give_card(New_Deck)
+        You.give_card(New_Deck)
+        for j in range(0, int(playerNum)):
+            NPC[j].give_card(New_Deck)
+
+    # give two cards
+    print('딜러의 카드', end=': ')
+    Dealer.display_one_card()
+
+    print('당신의 카드', end=': ')
+    You.display_card()
+
+    for i in range(0, int(playerNum)):
+        print("NPC %i의 카드" % (i+1), end=': ')
+        NPC[i].display_card()
+    # Display card(카드를 보여준다)
+    end = 1
+    # 임시
+# for i in range(0, 53):
+#     print(New_Deck.FullDeck[0].print_card())
+#     p1.give_card(New_Deck)
+#     print(i)
