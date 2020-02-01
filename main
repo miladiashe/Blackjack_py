@@ -22,14 +22,18 @@ end = 0
 while end == 0:
     round_num = 1
     print('==========ROUND %d==========' % round_num)
+
+    print('베팅을 해 주시기 바랍니다.')
+    You.betting()
+    for i in range(0, int(playerNum)):
+        NPC[i].betting()
+        print('NPC %d 님께서는 %d 달러를 거셨습니다.' % (i+1, NPC[i].bet_money))
+
     for i in range(0, 2):
         Dealer.give_card(New_Deck)
         You.give_card(New_Deck)
         for j in range(0, int(playerNum)):
             NPC[j].give_card(New_Deck)
-
-    # bet money
-
 
     # give two cards
     print('딜러의 카드', end=': ')
@@ -44,9 +48,23 @@ while end == 0:
     # Display card(카드를 보여준다)
 
     print("당신의 차례입니다.")
-    if You.win_or_not() == 21:
-        print("블랙잭, 승리하셨습니다.")
-        # 건 돈의 두 배를 받는다.
+    while You.status == 0:
+        print("현재 당신의 카드입니다.")
+        You.display_card()
+        if You.win_or_not() == 21:
+            print("블랙잭, 승리하셨습니다.")
+            You.status = 21
+            # 건 돈의 두 배를 받는다.
+        elif You.win_or_not() == 0:
+            print("21 초과로 패배입니다.")
+            You.status = 1
+            # 건 돈이 사라진다.
+        else:
+            if You.declare() == 0:
+                print('stop')
+                You.status = 2
+            else:
+                You.give_card(New_Deck)
     # user turn
 
     end = 1

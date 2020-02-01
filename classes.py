@@ -10,7 +10,7 @@ class Player:
         self.hand_value = 0
         self.status = 0
         self.bet_money = 0
-        # 0일시 살아있음, 1이면 게임오버 등
+        # 0일시 계속 진햏, 1이면 게임오버, 2일 시 스톱, 21일시 블랙잭
 
     def give_card(self, deck):
         if not deck.FullDeck:
@@ -46,10 +46,13 @@ class Player:
     def win_or_not(self):
         if self.hand_value == 21:
             return 21
+        # 블랙잭
         elif self.hand_value > 21:
             return 0
+        # 패배
         elif self.hand_value < 21:
             return 1
+        # 계속 플레이 가능
 
     def betting(self):
         self.bet_money = random.randrange(1, max_bet)
@@ -88,6 +91,7 @@ class User(Player):
                 loop_end = 1
             else:
                 print('잘못된 입력입니다.')
+
 
 class Deck:
     def __init__(self, decknum):
