@@ -28,8 +28,9 @@ class Player:
             self.hand_value = self.hand_value + self.hand[i].value
             if self.hand[i].isAce:
                 ace_status = ace_status + 1
-        if self.hand_value > 21 and ace_status > 0:
+        while ace_status > 0 and self.hand_value > 21:
             self.hand_value = self.hand_value - 10
+            ace_status = ace_status - 1
 
     def declare(self):
         if self.hand_value >= 17:
@@ -38,6 +39,14 @@ class Player:
         else:
             return 1
             # go
+
+    def win_or_not(self):
+        if self.hand_value == 21:
+            return 21
+        elif self.hand_value > 21:
+            return 0
+        elif self.hand_value < 21:
+            return 1
 
 
 class Dealer(Player):
@@ -63,7 +72,7 @@ class User(Player):
         while True:
             go_stop = input('카드를 더 받으시겠습니까? Yes = 1 No = 0')
             if go_stop in [0, 1]:
-                return go_stop
+                return int(go_stop)
             else:
                 input('잘못된 입력입니다.')
 
