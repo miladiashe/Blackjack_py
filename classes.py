@@ -1,5 +1,7 @@
 import random
 
+max_bet = 20
+
 
 class Player:
     def __init__(self, money):
@@ -7,6 +9,7 @@ class Player:
         self.my_money = money
         self.hand_value = 0
         self.status = 0
+        self.bet_money = 0
         # 0일시 살아있음, 1이면 게임오버 등
 
     def give_card(self, deck):
@@ -48,6 +51,10 @@ class Player:
         elif self.hand_value < 21:
             return 1
 
+    def betting(self):
+        self.bet_money = random.randrange(1, max_bet)
+        self.my_money = self.my_money - self.bet_money
+
 
 class Dealer(Player):
     def __init__(self):
@@ -61,21 +68,26 @@ class Dealer(Player):
             print(self.hand[i].print_card(), end=' ')
         print('\n')
 
-    def display_card(self):
-        for i in range(0, len(self.hand)):
-            print(self.hand[i].print_card(), end=' ')
-        print('\n')
-
 
 class User(Player):
     def declare(self):
         while True:
             go_stop = input('카드를 더 받으시겠습니까? Yes = 1 No = 0')
-            if go_stop in [0, 1]:
+            if int(go_stop) in [0, 1]:
                 return int(go_stop)
             else:
-                input('잘못된 입력입니다.')
+                print('잘못된 입력입니다.')
 
+    def betting(self):
+        loop_end = 0
+        while loop_end == 0:
+            money = input('얼마를 거시겠습니까?')
+            if money.isdecimal():
+                self.bet_money = int(money)
+                self.my_money = self.my_money - self.bet_money
+                loop_end = 1
+            else:
+                print('잘못된 입력입니다.')
 
 class Deck:
     def __init__(self, decknum):

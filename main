@@ -2,6 +2,7 @@ import classes
 start_money = 50
 max_npc = 4
 
+
 print('==========BlackJack=========')
 New_Deck = classes.Deck(1)
 # 덱 객체를 하나 생성, 들어가는 숫자는 사용하는 카드 벌수
@@ -27,6 +28,9 @@ while end == 0:
         for j in range(0, int(playerNum)):
             NPC[j].give_card(New_Deck)
 
+    # bet money
+
+
     # give two cards
     print('딜러의 카드', end=': ')
     Dealer.display_one_card()
@@ -38,6 +42,12 @@ while end == 0:
         print("NPC %i의 카드" % (i+1), end=': ')
         NPC[i].display_card()
     # Display card(카드를 보여준다)
+
+    print("당신의 차례입니다.")
+    if You.win_or_not() == 21:
+        print("블랙잭, 승리하셨습니다.")
+        # 건 돈의 두 배를 받는다.
+    # user turn
 
     end = 1
     # 임시
