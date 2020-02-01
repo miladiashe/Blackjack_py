@@ -50,6 +50,7 @@ while end == 0:
     print("당신의 차례입니다.")
     while You.status == 0:
         print("현재 당신의 카드입니다.")
+        You.count_value()
         You.display_card()
         if You.win_or_not() == 21:
             print("블랙잭, 승리하셨습니다.")
