@@ -23,9 +23,10 @@ class Player:
     def display_card(self):
         for i in range(0, len(self.hand)):
             print(self.hand[i].print_card(), end=' ')
-        print('\n')
+        print('')
 
     def count_value(self):
+        self.hand_value = 0
         ace_status = 0
         for i in range(0, len(self.hand)):
             self.hand_value = self.hand_value + self.hand[i].value
@@ -63,13 +64,14 @@ class Dealer(Player):
     def __init__(self):
         self.hand = []
         self.hand_value = 0
-        # 딜러는 판돈과 상태를 갖지 않는다.
+        self.status = 0
+        # 딜러는 판돈을 갖지 않는다.
 
     def display_one_card(self):
         print('unknown', end=' ')
         for i in range(1, len(self.hand)):
             print(self.hand[i].print_card(), end=' ')
-        print('\n')
+        print('')
 
 
 class User(Player):

@@ -10,7 +10,8 @@ Dealer = classes.Dealer()
 You = classes.User(start_money)
 NPC = []
 playerNum = input('같이 플레이할 NPC 의 수를 입력해주세요. Max = 4')
-while int(playerNum) > max_npc or int(playerNum) <= 0:
+playerNum = int(playerNum)
+while playerNum > max_npc or playerNum <= 0:
     playerNum = input('최대 4명입니다. 다시 입력해 주세요.')
 for i in range(0, int(playerNum)):
     NPC.append(classes.Player(start_money))
@@ -25,14 +26,14 @@ while end == 0:
 
     print('베팅을 해 주시기 바랍니다.')
     You.betting()
-    for i in range(0, int(playerNum)):
+    for i in range(0, playerNum):
         NPC[i].betting()
         print('NPC %d 님께서는 %d 달러를 거셨습니다.' % (i+1, NPC[i].bet_money))
 
     for i in range(0, 2):
         Dealer.give_card(New_Deck)
         You.give_card(New_Deck)
-        for j in range(0, int(playerNum)):
+        for j in range(0, playerNum):
             NPC[j].give_card(New_Deck)
 
     # give two cards
@@ -42,7 +43,7 @@ while end == 0:
     print('당신의 카드', end=': ')
     You.display_card()
 
-    for i in range(0, int(playerNum)):
+    for i in range(0, playerNum):
         print("NPC %i의 카드" % (i+1), end=': ')
         NPC[i].display_card()
     # Display card(카드를 보여준다)
@@ -66,7 +67,55 @@ while end == 0:
                 You.status = 2
             else:
                 You.give_card(New_Deck)
+                print("한 장 더 받으셨습니다.")
     # user turn
+
+    for i in range(0, playerNum):
+        print("NPC %d 님의 차례입니다." % (i+1))
+        while NPC[i].status == 0:
+            print("현재 NPC %d 님의 카드입니다." % (i+1))
+            NPC[i].count_value()
+            NPC[i].display_card()
+            if NPC[i].win_or_not() == 21:
+                print("블랙잭, 승리하셨습니다.")
+                NPC[i].status = 21
+                # 건 돈의 두 배를 받는다.
+            elif NPC[i].win_or_not() == 0:
+                print("21 초과로 패배입니다.")
+                NPC[i].status = 1
+                # 건 돈이 사라진다.
+            else:
+                if NPC[i].declare() == 0:
+                    print('stop')
+                    NPC[i].status = 2
+                else:
+                    NPC[i].give_card(New_Deck)
+        input('확인하셨습니까? 아무 키나 눌러 주세요.')
+
+    # npc turn
+
+    print("마지막으로, 제 차례입니다.")
+    print("제가 받은 카드입니다.")
+    Dealer.display_card()
+    while Dealer.status == 0:
+        Dealer.count_value()
+        if Dealer.win_or_not() == 21:
+            print("블랙잭, 저의 승리입니다.")
+            Dealer.status = 21
+            # 블랙잭인 플레이어 외의 전원이 패배
+        elif Dealer.win_or_not() == 0:
+            print("21 초과로 패배입니다.")
+            Dealer.status = 1
+            # 죽은 플레이어 외의 전원이 승리
+        else:
+            if Dealer.declare() == 0:
+                print('카드의 합이 17 이상이므로 그만 받겠습니다.')
+                Dealer.status = 2
+                # 딜러보다 카드의 합이 높은 사람만 승리
+            else:
+                Dealer.give_card(New_Deck)
+                print('한 장 더 받겠습니다.')
+                Dealer.display_card()
 
     end = 1
     # 임시
