@@ -10,7 +10,7 @@ class Player:
         self.hand_value = 0
         self.status = 0
         self.bet_money = 0
-        # 0일시 계속 진햏, 1이면 게임오버, 2일 시 스톱, 21일시 블랙잭
+        # 0일시 계속 진행, 1이면 게임오버, 2일 시 스톱, 21일시 블랙잭
 
     def give_card(self, deck):
         if not deck.FullDeck:
@@ -56,8 +56,20 @@ class Player:
         # 계속 플레이 가능
 
     def betting(self):
-        self.bet_money = random.randrange(1, max_bet)
-        self.my_money = self.my_money - self.bet_money
+        while True:
+            self.bet_money = random.randrange(1, max_bet)
+            if self.my_money - self.bet_money >= 0:
+                self.my_money = self.my_money - self.bet_money
+                break
+
+    def give_money(self, winner_choose):
+        if winner_choose == 1:
+            # 이기면 1
+            self.my_money = self.my_money + (self.bet_money * 2)
+            self.bet_money = 0
+        else:
+            self.bet_money = 0
+            # 지면 0
 
 
 class Dealer(Player):
@@ -84,13 +96,15 @@ class User(Player):
                 print('잘못된 입력입니다.')
 
     def betting(self):
-        loop_end = 0
-        while loop_end == 0:
+        while True:
             money = input('얼마를 거시겠습니까?')
             if money.isdecimal():
-                self.bet_money = int(money)
-                self.my_money = self.my_money - self.bet_money
-                loop_end = 1
+                if int(money) <= self.my_money:
+                    self.bet_money = int(money)
+                    self.my_money = self.my_money - self.bet_money
+                    break
+                else:
+                    print('가진 돈보다 많이 걸 수는 없습니다.')
             else:
                 print('잘못된 입력입니다.')
 

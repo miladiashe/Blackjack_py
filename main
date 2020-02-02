@@ -23,12 +23,12 @@ end = 0
 while end == 0:
     round_num = 1
     print('==========ROUND %d==========' % round_num)
-
+    print('초기 자금은 %d 만원 입니다.' % start_money)
     print('베팅을 해 주시기 바랍니다.')
     You.betting()
     for i in range(0, playerNum):
         NPC[i].betting()
-        print('NPC %d 님께서는 %d 달러를 거셨습니다.' % (i+1, NPC[i].bet_money))
+        print('NPC %d 님께서는 %d 만원을 거셨습니다.' % (i+1, NPC[i].bet_money))
 
     for i in range(0, 2):
         Dealer.give_card(New_Deck)
@@ -68,6 +68,7 @@ while end == 0:
             else:
                 You.give_card(New_Deck)
                 print("한 장 더 받으셨습니다.")
+    input('확인하셨습니까? 아무 키나 눌러 주세요.')
     # user turn
 
     for i in range(0, playerNum):
@@ -116,6 +117,95 @@ while end == 0:
                 Dealer.give_card(New_Deck)
                 print('한 장 더 받겠습니다.')
                 Dealer.display_card()
+    input('확인하셨습니까? 아무 키나 눌러 주세요.')
+
+    if Dealer.status == 21:
+        print('제가 블랙잭이므로 블랙잭이 아니라면 전부 돈을 잃으셨습니다.')
+    elif Dealer.status == 1:
+        print('딜러인 제가 죽었으므로 남아있는 분 전부 승리하셨습니다.')
+
+    if Dealer.status == 21:
+        if You.status == 21:
+            print('축하합니다. 블랙잭으로 승리하셨습니다.')
+            You.give_money(1)
+            # 돈받음
+        else:
+            print('패배하셨습니다.')
+            You.give_money(0)
+            # 못받음
+    elif Dealer.status == 1:
+        if You.status == 1:
+            print('패배하셨습니다.')
+            You.give_money(0)
+            # 못받음
+        else:
+            print('당신의 승리입니다.')
+            You.give_money(1)
+            # 돈받음
+    else:
+        if You.status == 1:
+            print('패배하셨습니다.')
+            You.give_money(0)
+            # 딜러가 살았는데 내가 죽었으니 돈 못받음
+        elif You.status == 21:
+            print('축하합니다. 블랙잭으로 승리하셨습니다.')
+            You.give_money(1)
+            # 돈 받음, 대사 다르게
+        elif You.hand_value > Dealer.hand_value:
+            print('승리하셨습니다.')
+            You.give_money(1)
+            # 돈 받음
+        elif You.hand_value == Dealer.hand_value:
+            print('아슬아슬하게 승리하셨군요.')
+            You.give_money(1)
+            # 돈 받음, 대사 다르게
+        else:
+            print('패배하셨습니다.')
+            You.give_money(0)
+            # 돈 못받음
+    # USER 승패 처리
+
+    for i in range(0, playerNum)
+        if Dealer.status == 21:
+            if NPC[i].status == 21:
+                print('축하합니다 NPC%d 님. 블랙잭으로 승리하셨습니다.' % (i+1))
+                NPC[i].give_money(1)
+                # 돈받음
+            else:
+                print('패배하셨습니다.')
+                NPC[i].give_money(0)
+                # 못받음
+        elif Dealer.status == 1:
+            if npc[i].status == 1:
+                print('패배하셨습니다.')
+                NPC[i].give_money(0)
+                # 못받음
+            else:
+                print('당신의 승리입니다.')
+                NPC[i].give_money(1)
+                # 돈받음
+        else:
+            if NPC[i].status == 1:
+                print('패배하셨습니다.')
+                NPC[i].give_money(0)
+                # 딜러가 살았는데 내가 죽었으니 돈 못받음
+            elif NPC[i].status == 21:
+                print('축하합니다. 블랙잭으로 승리하셨습니다.')
+                NPC[i].give_money(1)
+                # 돈 받음, 대사 다르게
+            elif NPC[i].hand_value > Dealer.hand_value:
+                print('승리하셨습니다.')
+                NPC[i].give_money(1)
+                # 돈 받음
+            elif NPC[i].hand_value == Dealer.hand_value:
+                print('아슬아슬하게 승리하셨군요.')
+                NPC[i].give_money(1)
+                # 돈 받음, 대사 다르게
+            else:
+                print('패배하셨습니다.')
+                NPC[i].give_money(0)
+                # 돈 못받음
+    # NPC 승패 처리
 
     end = 1
     # 임시
