@@ -71,6 +71,11 @@ class Player:
             self.bet_money = 0
             # 지면 0
 
+    def reset(self):
+        self.hand = []
+        self.hand_value = 0
+        self.status = 0
+
 
 class Dealer(Player):
     def __init__(self):

@@ -20,10 +20,10 @@ for i in range(0, int(playerNum)):
 
 print('초기 자금은 %d 만원 입니다.' % start_money)
 end = 0
+round_num = 1
 # 게임이 끝났을 때 end 가 1이 된다
 while end == 0:
-    round_num = 1
-    print('==========ROUND %d==========' % round_num)
+    print("==========ROUND %d==========" % round_num)
     print('베팅을 해 주시기 바랍니다.')
     You.betting()
     for i in range(0, playerNum):
@@ -54,6 +54,10 @@ while end == 0:
 
     print("당신의 차례입니다.")
     while You.status == 0:
+        if len(New_Deck.FullDeck) <= 0:
+            print('카드가 다 떨어져서 게임을 끝냅니다.')
+            end = 1
+            break
         print("현재 당신의 카드입니다.")
         You.count_value()
         You.display_card()
@@ -76,8 +80,14 @@ while end == 0:
     # user turn
 
     for i in range(0, playerNum):
+        if end == 1:
+            break
         print('============================')
         print("NPC %d 님의 차례입니다." % (i+1))
+        if len(New_Deck.FullDeck) <= 0:
+            print('카드가 다 떨어져서 게임을 끝냅니다.')
+            end = 1
+            break
         while NPC[i].status == 0:
             print("현재 NPC %d 님의 카드입니다." % (i+1))
             NPC[i].count_value()
@@ -98,12 +108,16 @@ while end == 0:
                     NPC[i].give_card(New_Deck)
         input('확인하셨습니까? 아무 키나 눌러 주세요.')
 
-    # npc turn
+    if end == 1:
+        break
+
     print('============================')
     print("마지막으로, 제 차례입니다.")
     print("제가 받은 카드입니다.")
     Dealer.display_card()
     while Dealer.status == 0:
+        if end == 1:
+            break
         Dealer.count_value()
         if Dealer.win_or_not() == 21:
             print("블랙잭, 저의 승리입니다.")
@@ -119,11 +133,17 @@ while end == 0:
                 Dealer.status = 2
                 # 딜러보다 카드의 합이 높은 사람만 승리
             else:
+                if len(New_Deck.FullDeck) <= 0:
+                    print('카드가 다 떨어져서 게임을 끝냅니다.')
+                    end = 1
                 Dealer.give_card(New_Deck)
                 print('한 장 더 받겠습니다.')
                 Dealer.display_card()
     input('확인하셨습니까? 아무 키나 눌러 주세요.')
     print('============================')
+
+    if end == 1:
+        break
 
     if Dealer.status == 21:
         print('제가 블랙잭이므로 블랙잭이 아니라면 전부 돈을 잃으셨습니다.')
@@ -221,11 +241,46 @@ while end == 0:
     input('확인하셨다면 아무 키나 눌러주세요.')
     print('============================')
     # 남은 금액 표시
-    
-    # 한 사람이라도 0이 되면 게임 종료
+    if You.my_money == 0:
+        end = 1
+    for i in range(0, playerNum):
+        if NPC[i].my_money == 0:
+            end = 1
+    # 한 사람이라도 남은 금액이 0이 되면 게임 종료
+    if len(New_Deck.FullDeck) <= (4+(2*playerNum)):
+        print('카드가 %d장 미만으로 남아 게임을 끝냅니다.' % (4+(2*playerNum)))
+        end = 1
+    # 플레이어에게 두 장씩 나누어주지 못하면 다음 턴을 진행하지 않고 게임 종료
 
-    end = 1
-    # 임시
+    round_num = round_num + 1
+    # 다음 라운드 표시
+
+    You.reset()
+    Dealer.reset()
+    for i in range(0, playerNum):
+        NPC[i].reset()
+    # 한 라운드가 끝나고 핸드와 변수들의 값을 버린다.
+
+print('남은 돈: %d' % You.my_money)
+for i in range(0, playerNum):
+    print('NPC %d에게 남은 돈: %d' % ((i + 1), NPC[i].my_money))
+
+last_winner = []
+for i in range(0, playerNum):
+    last_winner.append(NPC[i].my_money)
+last_winner.append(You.my_money)
+
+m = max(last_winner)
+winner_name = [i for i, j in enumerate(last_winner) if j == m]
+
+for i in winner_name:
+    if winner_name[i] == playerNum:
+        print('당신의 승리입니다!')
+    else:
+        print("NPC %d님의 승리입니다!" % winner_name[0])
+
+# 남은 돈이 제일 높은 사람을 최종 승자로 한다.
+
 # for i in range(0, 53):
 #     print(New_Deck.FullDeck[0].print_card())
 #     p1.give_card(New_Deck)
