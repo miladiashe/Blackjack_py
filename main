@@ -10,10 +10,17 @@ Dealer = classes.Dealer()
 You = classes.User(start_money)
 NPC = []
 playerNum = input('같이 플레이할 NPC 의 수를 입력해주세요. Max = 4')
-playerNum = int(playerNum)
-while playerNum > max_npc or playerNum <= 0:
-    playerNum = input('최대 4명입니다. 다시 입력해 주세요.')
-for i in range(0, int(playerNum)):
+while True:
+    if playerNum.isdecimal():
+        playerNum = int(playerNum)
+        if playerNum > max_npc or playerNum <= 0:
+            playerNum = input('최대 4명입니다. 다시 입력해 주세요.')
+        else:
+            break
+    else:
+        playerNum = input('잘못된 입력입니다. 다시 입력해 주세요.')
+
+for i in range(0, playerNum):
     NPC.append(classes.Player(start_money))
 # scan number
 # make player class 'scan' times
@@ -274,7 +281,7 @@ m = max(last_winner)
 winner_name = [i for i, j in enumerate(last_winner) if j == m]
 
 for i in winner_name:
-    if winner_name[i] == playerNum:
+    if i == playerNum:
         print('당신의 승리입니다!')
     else:
         print("NPC %d님의 승리입니다!" % winner_name[0])

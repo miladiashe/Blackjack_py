@@ -14,8 +14,7 @@ class Player:
 
     def give_card(self, deck):
         if not deck.FullDeck:
-            print('temp')
-            # 여기다 카드 다 써서 게임을 중단하는 경우를 작성
+            print('예상치 못한 오류로 게임을 중단합니다.')
         else:
             self.hand.append(deck.FullDeck[0])
             del deck.FullDeck[0]
@@ -95,8 +94,11 @@ class User(Player):
     def declare(self):
         while True:
             go_stop = input('카드를 더 받으시겠습니까? Yes = 1 No = 0')
-            if int(go_stop) in [0, 1]:
-                return int(go_stop)
+            if go_stop.isdecimal():
+                if int(go_stop) in [0, 1]:
+                    return int(go_stop)
+                else:
+                    print('잘못된 입력입니다.')
             else:
                 print('잘못된 입력입니다.')
 
